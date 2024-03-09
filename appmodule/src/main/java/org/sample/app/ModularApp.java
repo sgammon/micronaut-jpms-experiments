@@ -55,11 +55,11 @@ public class ModularApp {
         System.out.println("Hello, modular Java! " + ModularLibClass.getMessage());
         System.out.println("App resource: " + readResource("/appmodule.txt"));
         System.out.println("Lib resource: " + readResource("/libmodule.txt"));
-        System.out.println("App resource (T): " + readResourceFromModule(
+        System.out.println("App resource (M): " + readResourceFromModule(
             ModularLibClass.class.getModule(),
             "/META-INF/micronaut/appmodule.txt"
         ));
-        System.out.println("Lib resource (T): " + readResourceFromModule(
+        System.out.println("Lib resource (M): " + readResourceFromModule(
             ModularLibClass.class.getModule(),
             "/META-INF/micronaut/libmodule.txt"
         ));

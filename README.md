@@ -14,13 +14,68 @@ Type-safe project accessors is an incubating feature.
 Hello, modular Java! Hello, Modular Lib!
 App resource: This is an app module resource
 Lib resource: This is a modular resource
-App resource (T): This is an app module resource
-Lib resource (T): This is a modular resource
+App resource (M): This is an app module resource
+Lib resource (M): This is a modular resource
 App resource (T): This is an app module resource
 Lib resource (T): This is a modular resource
 
 BUILD SUCCESSFUL in 1s
 11 actionable tasks: 3 executed, 8 up-to-date
+```
+
+There are two JPMS modules: `demo.libmodule` and `demo.appmodule`. The "app module" depends on the "lib module."
+
+`App resource` / `Lib resource` show:
+```java
+    private static String readResource(String name) {
+        try (var stream = ModularApp.class.getResourceAsStream(name)) {
+            assert stream != null;
+
+            try (var buf = new BufferedReader(new InputStreamReader(stream))) {
+                return buf.readLine();
+            }
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
+    }
+```
+
+`(M)` shows:
+```java
+    private static String readResourceFromModule(Module base, String name) {
+        var thisModule = ModularApp.class.getModule();
+        assert base.isNamed();
+        assert base.getName().equals("demo.libmodule");
+        assert base.isExported("org.sample.lib");
+        assert base.canRead(thisModule);
+
+        try (var stream = thisModule.getResourceAsStream(name)) {
+            assert stream != null;
+
+            try (var buf = new BufferedReader(new InputStreamReader(stream))) {
+                return buf.readLine();
+            }
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
+    }
+```
+
+`(T)` shows:
+```java
+    private static String readResourceThisModule(String name) {
+        var thisModule = ModularApp.class.getModule();
+
+        try (var stream = thisModule.getResourceAsStream(name)) {
+            assert stream != null;
+
+            try (var buf = new BufferedReader(new InputStreamReader(stream))) {
+                return buf.readLine();
+            }
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
+    }
 ```
 
 ## What does this project show?
