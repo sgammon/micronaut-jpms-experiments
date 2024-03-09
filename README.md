@@ -19,6 +19,17 @@ BUILD SUCCESSFUL in 1s
 11 actionable tasks: 3 executed, 8 up-to-date
 ```
 
+## What does this project show?
+
+**1) Cross-module use of resources**
+
+Experiments for loading resources across Java module boundaries, which will be needed in order to get Micronaut's DI
+container and injection tools working properly.
+
+**2) Cross-module use of services**
+
+Experiments for Micronaut's use of Service Loader under JPMS.
+
 ----
 
 ## Micronaut 4.3.5 Documentation
