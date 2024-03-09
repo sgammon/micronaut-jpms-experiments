@@ -13,7 +13,11 @@ Type-safe project accessors is an incubating feature.
 > Task :appmodule:run
 Hello, modular Java! Hello, Modular Lib!
 App resource: This is an app module resource
-App resource: This is a modular resource
+Lib resource: This is a modular resource
+App resource (T): This is an app module resource
+Lib resource (T): This is a modular resource
+App resource (T): This is an app module resource
+Lib resource (T): This is a modular resource
 
 BUILD SUCCESSFUL in 1s
 11 actionable tasks: 3 executed, 8 up-to-date
@@ -28,7 +32,11 @@ container and injection tools working properly.
 
 **2) Cross-module use of services**
 
-Experiments for Micronaut's use of Service Loader under JPMS.
+Experiments for Micronaut's use of Service Loader under JPMS. (Coming soon)
+
+**3) Options for addressing the split-package issue at build time**
+
+(Coming soon)
 
 ----
 
