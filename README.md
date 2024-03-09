@@ -1,3 +1,26 @@
+# Micronaut JPMS Experiments
+
+Quick experiments for using Micronaut under JPMS. Runnable with:
+
+```
+./gradlew :appmodule:run
+```
+
+Expected output:
+```
+Type-safe project accessors is an incubating feature.
+
+> Task :appmodule:run
+Hello, modular Java! Hello, Modular Lib!
+App resource: This is an app module resource
+App resource: This is a modular resource
+
+BUILD SUCCESSFUL in 1s
+11 actionable tasks: 3 executed, 8 up-to-date
+```
+
+----
+
 ## Micronaut 4.3.5 Documentation
 
 - [User Guide](https://docs.micronaut.io/4.3.5/guide/index.html)
