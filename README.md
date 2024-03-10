@@ -115,13 +115,12 @@ public class ResourceProvider {
 Experiments for loading resources across Java module boundaries, which will be needed in order to get Micronaut's DI
 container and injection tools working properly.
 
-**2) Cross-module use of services**
+Inter-module resource access **is possible** but only under certain circumstances. Techniques demonstrated:
 
-Experiments for Micronaut's use of Service Loader under JPMS. (Coming soon)
-
-**3) Options for addressing the split-package issue at build time**
-
-(Coming soon)
+**"Resource trampoline access"**
+A class is held in a Java module, perhaps generated on behalf of the user at build time. This class provides access to
+resources in the module. No instance of this class is necessary; a `static` method can circumvent the module boundary
+and offer the result of `this.class.getModule().getResourceAsStream(name)`.
 
 ----
 
@@ -157,4 +156,5 @@ Experiments for Micronaut's use of Service Loader under JPMS. (Coming soon)
 
 - [Micronaut AOT documentation](https://micronaut-projects.github.io/micronaut-aot/latest/guide/)
 
+[0]: https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Module.html#getResourceAsStream(java.lang.String)
 
