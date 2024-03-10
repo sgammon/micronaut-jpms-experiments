@@ -24,6 +24,7 @@ application {
 
 dependencies {
     annotationProcessor(mn.micronaut.inject.java)
+    implementation(projects.annotations)
     implementation(projects.libmodule)
 }
 

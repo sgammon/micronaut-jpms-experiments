@@ -39,6 +39,8 @@ There are two JPMS modules: `demo.libmodule` and `demo.appmodule`. The "app modu
     }
 ```
 
+### Modular access
+
 `(M)` shows:
 ```java
     private static String readResourceFromModule(Module base, String name) {
@@ -60,6 +62,8 @@ There are two JPMS modules: `demo.libmodule` and `demo.appmodule`. The "app modu
     }
 ```
 
+### "This module" access
+
 `(T)` shows:
 ```java
     private static String readResourceThisModule(String name) {
@@ -77,6 +81,8 @@ There are two JPMS modules: `demo.libmodule` and `demo.appmodule`. The "app modu
     }
 ```
 
+### Trampoline resource access
+
 `(R)` shows:
 ```java
     private static String readResourceWithTrampoline(String name) {
@@ -90,6 +96,16 @@ There are two JPMS modules: `demo.libmodule` and `demo.appmodule`. The "app modu
             throw new RuntimeException(ioe);
         }
     }
+```
+
+Where `org.sample.lib.ResourceProvider` is an exported class within `demo.libmodule`:
+
+```java
+public class ResourceProvider {
+    public static InputStream getResource(String name) throws IOException {
+        return ResourceProvider.class.getModule().getResourceAsStream(name);
+    }
+}
 ```
 
 ## What does this project show?

@@ -11,6 +11,10 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+    api(projects.annotations)
+}
+
 java {
     sourceCompatibility = JavaVersion.toVersion("21")
 }

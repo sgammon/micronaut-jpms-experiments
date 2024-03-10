@@ -15,6 +15,7 @@ buildless {
 
 rootProject.name="demo"
 
+include(":annotations")
 include(":libmodule")
 include(":appmodule")
 
