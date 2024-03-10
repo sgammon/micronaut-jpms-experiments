@@ -1,6 +1,7 @@
 
 plugins {
     id("build.less") version("1.0.0-rc2")
+    id("io.micronaut.platform.catalog") version("4.3.4")
 }
 
 buildless {

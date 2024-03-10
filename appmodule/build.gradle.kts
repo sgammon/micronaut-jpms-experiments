@@ -1,8 +1,6 @@
 plugins {
     java
-    id("org.jetbrains.kotlin.jvm")
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.9.22"
-    id("com.google.devtools.ksp") version "1.9.22-1.0.17"
+    application
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("io.micronaut.application") version "4.3.4"
     id("io.micronaut.aot") version "4.3.4"
@@ -11,30 +9,57 @@ plugins {
 version = "0.1"
 group = "com.example"
 
+val entrypoint = "org.sample.app.ModularApp"
+val entrymodule = "demo.appmodule"
 val kotlinVersion = project.properties.get("kotlinVersion")
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    ksp("io.micronaut:micronaut-http-validation")
-    ksp("io.micronaut.serde:micronaut-serde-processor")
-    implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
-    implementation("io.micronaut.serde:micronaut-serde-jackson")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
-    compileOnly("io.micronaut:micronaut-http-client")
-    runtimeOnly("ch.qos.logback:logback-classic")
-    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
-    testImplementation("io.micronaut:micronaut-http-client")
-
-    api(projects.libmodule)
+application {
+    mainClass = entrypoint
+    mainModule = entrymodule
 }
 
+dependencies {
+    annotationProcessor(mn.micronaut.inject.java)
+    implementation(projects.libmodule)
+}
 
-application {
-    mainClass.set("org.sample.app.ModularApp")
+tasks.jar {
+    doLast {
+        project.exec {
+            workingDir = destinationDirectory.get().asFile
+            executable = "jar"
+            args(
+                "--update",
+                "--file",
+                archiveFileName.get(),
+                "--main-class",
+                entrypoint,
+                "."
+            )
+        }
+    }
+}
+
+tasks.register("runModular", Exec::class) {
+    executable("java")
+    dependsOn(tasks.jar)
+    mustRunAfter(tasks.jar)
+    inputs.files(tasks.jar.get().outputs)
+
+    args(
+        "--module-path",
+        (configurations.runtimeClasspath.get().asPath + ":" + tasks.jar.get().outputs.files.asPath),
+        "--module",
+        "$entrymodule/$entrypoint",
+    )
+}
+
+tasks.named("run", JavaExec::class.java) {
+
 }
 
 java {
