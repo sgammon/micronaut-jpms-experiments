@@ -10,14 +10,13 @@ Expected output:
 ```
 Type-safe project accessors is an incubating feature.
 
-> Task :appmodule:run
+> Task :appmodule:runModular
 Hello, modular Java! Hello, Modular Lib!
 App resource: This is an app module resource
-Lib resource: This is a modular resource
-App resource (M): This is an app module resource
-Lib resource (M): This is a modular resource
-App resource (T): This is an app module resource
-Lib resource (T): This is a modular resource
+Lib resource: ERR: java.lang.NullPointerException object was null: /libmodule.txt
+Lib resource (M): ERR: java.lang.NullPointerException object was null: /META-INF/micronaut/libmodule.txt
+Lib resource (T): ERR: java.lang.NullPointerException object was null: /META-INF/micronaut/libmodule.txt
+Lib resource (R): This is a modular resource
 
 BUILD SUCCESSFUL in 1s
 11 actionable tasks: 3 executed, 8 up-to-date
@@ -68,6 +67,21 @@ There are two JPMS modules: `demo.libmodule` and `demo.appmodule`. The "app modu
 
         try (var stream = thisModule.getResourceAsStream(name)) {
             assert stream != null;
+
+            try (var buf = new BufferedReader(new InputStreamReader(stream))) {
+                return buf.readLine();
+            }
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
+    }
+```
+
+`(R)` shows:
+```java
+    private static String readResourceWithTrampoline(String name) {
+        try (var stream = org.sample.lib.ResourceProvider.getResource(name)) {
+            check(name, stream);
 
             try (var buf = new BufferedReader(new InputStreamReader(stream))) {
                 return buf.readLine();
